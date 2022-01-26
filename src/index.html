@@ -1,0 +1,91 @@
+<html>
+	<style>
+		html {
+			background: black;
+			color: white;
+		}
+
+		body {
+			font-family: sans-serif;
+		}
+
+		.container {
+			height: 100%;
+			display: flex;
+			flex-direction: column;
+		}
+
+		#player {
+			width: 1000px;
+			align-self: center;
+		}
+
+		#video-list {
+			flex: 1;
+			overflow: hidden;
+			align-self: center;
+			margin-top: 15px;
+		}
+
+		.bottom {
+			display: flex;
+			justify-content: space-between
+		}
+
+		#fullscreen {
+			align-self: flex-end;
+		}
+	</style>
+
+	<div class="container">
+		<x-player id="player"></x-player>
+		<x-video-list id="video-list"></x-video-list>
+
+		<!-- todo fixed height -->
+		<div class="bottom">
+			<x-playlist-list id="playlist-list"></x-playlist-list>
+			<!-- todo fullscreen -->
+			<x-toggle id="fullscreen"></x-toggle>
+		</div>
+	</div>
+	<script>
+		require('./xElements/import');
+		const storage = require('./services/storage');
+		const PlayerModel = require('./xElements/player/PlayerModel');
+		const PlaylistListModel = require('./xElements/playlistList/PlaylistListModel');
+		const VideoListModel = require('./xElements/videoList/VideoListModel');
+
+		const $ = document.querySelector.bind(document);
+
+		let player = new PlayerModel();
+		let playlistList = new PlaylistListModel();
+		let videoList = new VideoListModel();
+		player.on('end', () => videoList.nextVideo());
+		playlistList.on('add', playlist => videoList.addPlaylist(playlist));
+		playlistList.on('remove', playlist => videoList.removePlaylist(playlist));
+		videoList.on('change-current', video => player.video = video);
+
+		$('#player').player = player;
+		$('#player').addEventListener('progress-set', ({detail: progress}) => player.progress = progress);
+		$('#player').addEventListener('pause-toggle', () => {
+			if (!videoList.currentVideo)
+				videoList.firstVideo();
+			player.paused = !player.paused;
+		});
+		$('#player').addEventListener('prev', () => {
+			if (player.time < 5)
+				videoList.prevVideo();
+			else
+				player.time = 0;
+		});
+		$('#player').addEventListener('next', () => videoList.nextVideo());
+		$('#player').addEventListener('seek-backward', () => player.seek(-10));
+		$('#player').addEventListener('seek-forward', () => player.seek(10));
+
+		$('#playlist-list').playlistList = playlistList;
+		$('#video-list').videoList = videoList;
+		$('#video-list').addEventListener('select', ({detail: videoId}) => videoList.currentId = videoId);
+
+		// todo visuals
+	</script>
+</html>

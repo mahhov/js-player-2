@@ -1,0 +1,18 @@
+<style>
+	:host{
+		display: block;
+	}
+
+	#pause-toggle {
+		background: green;
+	}
+
+	#pause-toggle.paused {
+		background: red;
+	}
+</style>
+
+<x-progress-bar id="progress"></x-progress-bar>
+<button id="prev">prev</button>
+<button id="pause-toggle">|></button>
+<button id="next">next</button>

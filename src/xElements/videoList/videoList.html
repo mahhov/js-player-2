@@ -1,0 +1,19 @@
+<style>
+	:host {
+		display: flex;
+		flex-direction: column;
+	}
+
+	#list {
+		flex: 1;
+		overflow: auto;
+	}
+
+	x-video-list-line.selected {
+		background: green;
+	}
+</style>
+
+<div id="list"></div>
+<div id="count"></div>
+<input id="query" consume-key>
