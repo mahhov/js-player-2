@@ -13,9 +13,8 @@
     "bs-better-stream": "^2.0.0",
     "electron": "^16.0.7",
     "electron-builder": "^22.14.5",
-    "google-oauth2-x": "^1.1.2",
-    "xx-element": "^3.2.0",
-    "ytdl-core": "^4.10.0"
+    "xx-element": "^3.3.0",
+    "ytdl-core": "^4.10.1"
   },
   "description": ""
 }
